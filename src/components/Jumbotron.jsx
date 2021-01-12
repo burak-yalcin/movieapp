@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-export default function Jumbotron({ movie, onSubmit }) {
+export default function Jumbotron({
+	movie,
+	onSubmit,
+	countBadge,
+	title,
+	height,
+}) {
 	var backgroundImage = "/2M2JxEv3HSpjnZWjY9NOdGgfUd.jpg";
 
 	if (movie.backdrop_path !== undefined) {
@@ -18,21 +24,34 @@ export default function Jumbotron({ movie, onSubmit }) {
 		setSearchInput(e.target.value);
 	}
 
+	var description = "";
+	if (movie.overview != null) {
+		description = movie.overview;
+	}
+
 	return (
-		<section className="jumbotron text-center " style={style}>
+		<section
+			className={"animate-area jumbotron text-center bg-dark " + height}
+			style={style}
+		>
 			<div className="container">
-				<h3>
-					<span className="badge badge-success mb-3">Popular Today</span>
-					<span className="badge badge-danger mb-3 ml-3">
-						{movie.vote_average}
-					</span>
-				</h3>
+				{countBadge ? (
+					<h3>
+						<span className="badge badge-success mb-3">Popular Today</span>
+						<span className="badge badge-danger mb-3 ml-3">
+							{movie.vote_average}
+						</span>
+					</h3>
+				) : null}
 
 				<h1 className="display-4 font-weight-bold bg-success rounded text-white ">
-					{movie.title}
+					{title ? movie.title : "Search Results"}
 				</h1>
+
 				<p className="lead text-white mt-3 font-weight-bold">
-					{movie.overview}
+					{description.length > 180
+						? description.substring(0, 180) + "..."
+						: description}
 				</p>
 
 				<div className="form-row d-flex justify-content-center mt-5">
@@ -55,7 +74,9 @@ export default function Jumbotron({ movie, onSubmit }) {
 					type="submit"
 					value="Search"
 					className="btn btn-success my-2"
-					onClick={() => onSubmit(searchInput)}
+					onClick={() => {
+						onSubmit(searchInput);
+					}}
 				/>
 			</div>
 		</section>

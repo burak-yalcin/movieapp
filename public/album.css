@@ -1,5 +1,21 @@
 :root {
 	--jumbotron-padding-y: 3rem;
+	background-color: #343a40;
+}
+
+@keyframes animatedBackground {
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 100% 0;
+	}
+}
+.animate-area {
+	background-image: url();
+	background-position: 0px 0px;
+	background-repeat: none;
+	animation: animatedBackground 60s linear infinite;
 }
 
 .jumbotron {
@@ -8,7 +24,13 @@
 	margin-bottom: 0;
 	background-color: #fff;
 	border-radius: 0;
+	height: 40rem;
 }
+
+.searched {
+	height: 20rem !important;
+}
+
 .movie-jumbotron {
 	padding-top: var(--jumbotron-padding-y);
 	padding-bottom: var(--jumbotron-padding-y);

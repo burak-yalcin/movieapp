@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 export default function Header({ onToggle, theme }) {
@@ -15,8 +15,25 @@ export default function Header({ onToggle, theme }) {
 		var navbar = "navbar-light";
 	}
 
+	const node = useRef();
+
+	useEffect(() => {
+		// add when mounted
+		document.addEventListener("mousedown", handleClick); // return function to be called when unmounted
+		return () => {
+			document.removeEventListener("mousedown", handleClick);
+		};
+	}, []);
+
+	const handleClick = (e) => {
+		if (node.current.contains(e.target)) {
+			return;
+		}
+		window.$(".collapse").collapse("hide");
+	};
+
 	return (
-		<header>
+		<header ref={node}>
 			<div className={"collapse " + bg} id="navbarHeader">
 				<div className="container">
 					<div className="row">
@@ -58,7 +75,11 @@ export default function Header({ onToggle, theme }) {
 					</div>
 				</div>
 			</div>
-			<div className={"navbar box-shadow " + navbar + " " + bg}>
+			<div
+				className={
+					"navbar box-shadow border-bottom border-success " + navbar + " " + bg
+				}
+			>
 				<div className="container d-flex justify-content-between">
 					<Link to={"/"}>
 						<div className="navbar-brand d-flex align-items-center">

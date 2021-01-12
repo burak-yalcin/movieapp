@@ -1,14 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import Movie from "./pages/Movie";
-import ThemeContext, { themes } from "./ThemeContext";
+import { themes } from "./ThemeContext";
+import ModalContext from "./ModalContext";
 
 export default function BasicExample() {
 	const [theme, setTheme] = useState(themes.light);
-
-	const context = useContext(ThemeContext);
+	const [isOpen, setIsOpen] = useState(false);
+	const value = { isOpen, setIsOpen };
 
 	function onToggle() {
 		if (theme === themes.dark) {
@@ -21,14 +22,16 @@ export default function BasicExample() {
 	return (
 		<Router>
 			<ScrollToTop />
-			<Switch>
-				<Route exact path="/">
-					<Home onToggle={onToggle} theme={theme} />
-				</Route>
-				<Route path="/movie/:id">
-					<Movie onToggle={onToggle} theme={theme} />
-				</Route>
-			</Switch>
+			<ModalContext.Provider value={value}>
+				<Switch>
+					<Route exact path="/">
+						<Home onToggle={onToggle} theme={theme} />
+					</Route>
+					<Route exact path="/movie/:id">
+						<Movie onToggle={onToggle} theme={theme} />
+					</Route>
+				</Switch>
+			</ModalContext.Provider>
 		</Router>
 	);
 }

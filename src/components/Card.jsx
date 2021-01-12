@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import ModalContext from "../ModalContext";
+
 export default function Card({ image, title, id, popularity, theme }) {
 	if (theme.color === "black") {
 		var bg = "bg-dark";
@@ -10,6 +12,8 @@ export default function Card({ image, title, id, popularity, theme }) {
 		var text = "text-dark";
 		var border = "";
 	}
+
+	const { setIsOpen } = useContext(ModalContext);
 
 	return (
 		<div className="col-md-3 ">
@@ -23,7 +27,11 @@ export default function Card({ image, title, id, popularity, theme }) {
 					<p className="card-text">{title}</p>
 					<div className="d-flex justify-content-between align-items-baseline">
 						<Link to={"/movie/" + id}>
-							<button type="button" className="btn btn-sm btn-outline-success">
+							<button
+								type="button"
+								onClick={() => setIsOpen(false)}
+								className="btn btn-sm btn-outline-success"
+							>
 								View
 							</button>
 						</Link>

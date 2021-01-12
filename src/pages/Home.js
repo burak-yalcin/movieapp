@@ -13,6 +13,11 @@ function Home({ onToggle, theme }) {
 		"https://image.tmdb.org/t/p/original/k8Q9ulyRE8fkvZMkAM9LPYMKctb.jpg"
 	);
 
+	const [title, setTitle] = useState(true);
+	const [countBadge, setCountBadge] = useState(true);
+	const [jumbotronHeight, setJumbotronHeight] = useState("");
+	const [firstSearch, setFirstSearch] = useState(false);
+
 	function fetchData() {
 		axios
 			.get(
@@ -50,6 +55,13 @@ function Home({ onToggle, theme }) {
 
 	function onSubmit(formState) {
 		setSearchInput(formState);
+		setCountBadge(false);
+		setTitle(false);
+		var newMovie = popularMovie;
+		newMovie.overview = null;
+		setPopularMovie(newMovie);
+		setJumbotronHeight("searched");
+		setFirstSearch(true);
 	}
 
 	if (theme.color === "black") {
@@ -63,11 +75,24 @@ function Home({ onToggle, theme }) {
 	return (
 		<div style={theme}>
 			<Header onToggle={onToggle} theme={theme} />
-			<main role="main">
-				<Jumbotron movie={popularMovie} onSubmit={onSubmit} theme={theme} />
-				<div class={"album py-5 " + bg}>
-					<div class="container">
-						<MovieList movies={movielist} theme={theme} />
+			<main role="main" className={bg}>
+				<Jumbotron
+					movie={popularMovie}
+					onSubmit={onSubmit}
+					theme={theme}
+					countBadge={countBadge}
+					title={title}
+					height={jumbotronHeight}
+				/>
+				<div className={"album py-5 " + bg}>
+					<div className="container">
+						<MovieList
+							movies={movielist}
+							theme={theme}
+							countBadge={countBadge}
+							isSearched={firstSearch}
+							searchInput={searchInput}
+						/>
 					</div>
 				</div>
 			</main>

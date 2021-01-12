@@ -5,10 +5,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MovieJumbotron from "../components/MovieJumbotron";
 
-function Movie({ onToggle, theme }) {
+function Movie({ onToggle, theme, modalToggle }) {
 	const { id } = useParams();
 	const [movie, setMovie] = useState([]);
 	const [image, setImage] = useState("");
+	const [similarMovies, setSimilarMovies] = useState([]);
 
 	function fetchData() {
 		axios
@@ -25,15 +26,33 @@ function Movie({ onToggle, theme }) {
 			});
 	}
 
+	function fetchSimilar() {
+		axios
+			.get(
+				"https://api.themoviedb.org/3/movie/" +
+					id +
+					"/similar?api_key=eb785532bb9533d646dcf8f747dfc9ec&language=en-US"
+			)
+			.then(function (response) {
+				setSimilarMovies(response.data.results);
+			});
+	}
+
 	useEffect(() => {
 		fetchData();
-	}, []);
+		fetchSimilar();
+	}, [id]);
 
 	return (
 		<div>
 			<Header onToggle={onToggle} theme={theme} />
 			<main role="main">
-				<MovieJumbotron background={image} movie={movie} theme={theme} />
+				<MovieJumbotron
+					background={image}
+					movie={movie}
+					similar={similarMovies}
+					theme={theme}
+				/>
 			</main>
 			<Footer theme={theme} />
 		</div>
